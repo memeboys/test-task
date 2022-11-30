@@ -1,29 +1,30 @@
-import {Button, styled} from "@mui/material";
-import {Dispatch, SetStateAction, useState} from "react";
-import {BaseSyntheticEvent} from "react";
-import {Mock} from "../TaskList/TaskList";
+import { useState, BaseSyntheticEvent, FC } from "react";
+import { TextField, styled } from "@mui/material";
+import { FormProps, Mock } from "../../types/types";
 
-export interface FormState {
-    type: string;
-    description: any;
-    timeToDo?: number
-}
+const FormStyled = styled('form')({
+    borderBottom: '1px solid rgba(0,0,0,.2)',
+    marginBottom: '30px',
+    gap: '20px',
+    justifyContent: 'flex-start',
+    display: 'flex',
+    paddingBottom: '30px',
+})
+const ContainerStyled = styled('div')({
+    gap: '20px',
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+})
+const Button = styled('button')({
+    width: '50px',
+    color: 'white',
+    background: 'blue',
+    borderRadius: '5px',
+})
 
-export interface FormProps {
-    setTasks:Dispatch<SetStateAction<Mock[]>>
-}
-
-const Form = ({setTasks}: FormProps) => {
-
-    const InputStyled = styled('input')({
-        display:'block',
-        border:'1px solid black',
-        padding:10,
-        borderRadius:5,
-        marginTop:10,
-    });
-
-    const [formState, setFormState] = useState<FormState>({
+const Form:FC<FormProps> = ({ setTasks }) => {
+    const [formState, setFormState] = useState<Mock>({
         type: '',
         description:'',
         timeToDo: 0
@@ -40,28 +41,37 @@ const Form = ({setTasks}: FormProps) => {
             return [...prevState, formState]
         });
     }
+
     return(
-        <div style={{borderBottom:'1px solid black', marginBottom:'30px'}}>
-            <form action="#" style={{display:'flex', justifyContent:'space-between', marginBottom:'30px'}}>
-                <label htmlFor="type">
-                    Task Type
-                    <InputStyled value={formState.type} onChange={handleInputChange} type="text" name='type' id='type'/>
-                </label>
-                <label htmlFor="description">
-                     Description
-                     <InputStyled value={formState.description} onChange={handleInputChange} type="text" name='description'/>
-                 </label>
-                  <label htmlFor="timeToDo">
-                    Time to do
-                <InputStyled value={formState.timeToDo} onChange={handleInputChange} type="text" name='timeToDo'/>
-                  </label>
-              
-                <Button variant='outlined' type='submit' onClick={handleSubmit}>Add</Button>
-            </form>
-        </div>
-
+        <ContainerStyled>
+            <h2>Add Task</h2>
+            <FormStyled onSubmit={handleSubmit}>
+                <TextField
+                    required
+                    label="Task Type"
+                    color="primary"
+                    value={formState.type}
+                    name='type'
+                    onChange={handleInputChange}
+                />
+                <TextField
+                    required
+                    label="Description"
+                    value={formState.description}
+                    name='description'
+                    onChange={handleInputChange}
+                />
+                <TextField
+                    label="Time to do"
+                    value={formState.timeToDo}
+                    name='timeToDo'
+                    type="number"
+                    onChange={handleInputChange}
+                />
+                <Button type='submit'>Add</Button>
+            </FormStyled>
+        </ContainerStyled>
     )
-
 }
 
 export default Form;
